@@ -48,4 +48,31 @@ describe('Linked List', () => {
     expect(list.get(6)).toBe(7);
     expect(list.get(7)).toBeUndefined();
   });
+
+  it('should delete the head of the list', () => {
+    const list = new LinkedList();
+    list.insert(1);
+    list.insert(2);
+    list.insert(3);
+    list.insert(4);
+
+    const deleted = list.delete(0);
+    expect(list).toHaveLength(3);
+    expect(deleted).toBe(1);
+    expect(list.head).toHaveProperty('value', 2);
+  });
+
+  it('should delete a random item of the list', () => {
+    const list = new LinkedList();
+    list.insert(1);
+    list.insert(2);
+    list.insert(3);
+    list.insert(4);
+    list.insert(5);
+
+    const deleted = list.delete(3);
+    expect(list).toHaveLength(4);
+    expect(deleted).toBe(4);
+    expect(list.head).toHaveProperty('value', 1);
+  });
 });
