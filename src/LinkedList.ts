@@ -31,6 +31,18 @@ export class LinkedList<DataType> {
     else this.head = new Node(headValue);
   }
 
+  public get length(): number {
+    let node: Nullable<Node<DataType>> = this.head;
+    let index = 0;
+
+    while (node !== null) {
+      node = node.next;
+      index++;
+    }
+
+    return index;
+  }
+
   private insertAt(node: Node<DataType>, value: DataType): Node<DataType> {
     const nodeToInsert = new Node(value);
     node.next = nodeToInsert;
@@ -64,5 +76,30 @@ export class LinkedList<DataType> {
     }
 
     return node?.value;
+  }
+
+  public delete(index: number): DataType | undefined {
+    if (index === 0) {
+      const ahead = this.head?.next || null;
+      const head = this.head?.value;
+
+      this.head = ahead;
+      return head;
+    }
+
+    let before: Nullable<Node<DataType>> = null;
+    let node: Nullable<Node<DataType>> = this.head;
+    let i = 0;
+    while (i !== index) {
+      before = node;
+      node = node?.next || null;
+      i++;
+    }
+
+    const ahead = node?.next || null;
+    const value = node?.value;
+    if (before) before.next = ahead;
+
+    return value;
   }
 }
