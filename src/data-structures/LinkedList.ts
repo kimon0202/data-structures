@@ -24,6 +24,20 @@ export class LinkedList<T> {
     this.tail = null;
   }
 
+  public static from<A>(arr: ArrayLike<A>): LinkedList<A> {
+    const array = Array.from(arr).map(i => new LinkedListNode<A>(i));
+
+    array.forEach((i, idx, nodes) => {
+      i.next = nodes[idx + 1] || null;
+    });
+
+    const list = new LinkedList<A>();
+    [list.head] = array;
+    list.tail = array[array.length - 1];
+
+    return list;
+  }
+
   public append(value: T): void {
     if (this.head == null) {
       this.head = new LinkedListNode(value);

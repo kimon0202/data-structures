@@ -18,6 +18,18 @@ describe('Linked List', () => {
     });
   });
 
+  it('should create a linked list from an array', () => {
+    const array = [1, 2, 3, 4];
+    const list = LinkedList.from(array);
+
+    expect(list.toArray()).toStrictEqual(array);
+    expect(list.head?.value).toBe(1);
+    expect(list.head?.next?.value).toBe(2);
+    expect(list.head?.next?.next?.value).toBe(3);
+    expect(list.tail?.value).toBe(4);
+    expect(list.tail?.next).toBeNull();
+  });
+
   it('should create an empty list', () => {
     const list = new LinkedList();
 
