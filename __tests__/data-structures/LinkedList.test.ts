@@ -132,6 +132,23 @@ describe('Linked List', () => {
     expect(list.tail?.value).toBe(1);
   });
 
+  it('should remove the tail and correctly reset it', () => {
+    const list = new LinkedList<number>();
+    list.append(1);
+    list.append(2);
+    list.append(3);
+    list.append(4);
+    list.append(5);
+    list.append(6);
+    list.append(7);
+    list.append(8);
+
+    const val = list.removeTail();
+    expect(val?.value).toBe(8);
+    expect(list.tail?.value).toBe(7);
+    expect(list.tail?.next).toBeNull();
+  });
+
   it('should return an array version of the linked list', () => {
     const list = new LinkedList<number>();
     list.append(1);
@@ -170,6 +187,11 @@ describe('Linked List', () => {
     expect(node?.next?.value).toBe(6);
   });
 
+  it('should return null if searching in a empty list', () => {
+    const list = new LinkedList<number>();
+    expect(list.find(2)).toBeNull();
+  });
+
   it('should delete a node with the specified value', () => {
     const list = new LinkedList<number>();
     list.append(1);
@@ -184,6 +206,11 @@ describe('Linked List', () => {
     expect(list.find(2)?.next?.value).toBe(4);
   });
 
+  it('should return null if deleting from empty list', () => {
+    const list = new LinkedList<number>();
+    expect(list.delete(1)).toBeNull();
+  });
+
   it('should delete a node with the specified value when head === tail', () => {
     const list = new LinkedList<number>();
     list.append(1);
@@ -191,6 +218,19 @@ describe('Linked List', () => {
     const node = list.delete(1);
     expect(node?.value).toBe(1);
     expect(list.head).toBeNull();
+  });
+
+  it('should delete a node with the specified value when it is in tail', () => {
+    const list = new LinkedList<number>();
+    list.append(1);
+    list.append(2);
+    list.append(3);
+
+    const node = list.delete(3);
+    expect(node?.value).toBe(3);
+    expect(list.head?.value).toBe(1);
+    expect(list.tail?.value).toBe(2);
+    expect(list.tail?.next).toBeNull();
   });
 
   it('should traverse the list', () => {
