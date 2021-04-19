@@ -1,55 +1,55 @@
 import { Stack } from '../../src/data-structures/Stack';
+import { isNone, isSome } from '../../src/utils/Option';
 
 describe('Stack', () => {
   it('should create a empty stack', () => {
-    const stack = new Stack();
+    const stack = new Stack<number>();
     expect(stack).toHaveLength(0);
   });
 
-  it('should push an element to the stack', () => {
-    const stack = new Stack<number>();
-    stack.push(1);
-
-    expect(stack.peek()).toBe(1);
+  it('should create a stack with size 5', () => {
+    const stack = new Stack<number>(5);
+    expect(stack).toHaveLength(5);
   });
 
-  it('should pop an element off the stack', () => {
+  it('should return None when peeking an empty stack', () => {
     const stack = new Stack<number>();
-    stack.push(1);
-    stack.push(2);
-    stack.push(3);
+    const v = stack.pop();
 
-    expect(stack).toHaveLength(3);
-    expect(stack.pop()).toBe(3);
-    expect(stack.peek()).toBe(2);
-    expect(stack).toHaveLength(2);
+    expect(isNone(v)).toBe(true);
   });
 
-  it('should convert the stack in an array', () => {
+  it('should return None when popping from an empty stack', () => {
     const stack = new Stack<number>();
-    stack.push(1);
-    stack.push(2);
-    stack.push(3);
+    const peek = stack.peek();
 
-    expect(stack.toArray()).toStrictEqual([1, 2, 3]);
+    expect(isNone(peek)).toBe(true);
   });
 
-  it('should convert the stack to a string', () => {
+  it('should push an item to the stack', () => {
     const stack = new Stack<number>();
-    stack.push(1);
-    stack.push(2);
-    stack.push(3);
 
-    expect(stack.toString()).toBe('1,2,3');
+    stack.push(5);
+    expect(stack).toHaveLength(1);
   });
 
-  it('should return null if trying to peek empty stack', () => {
+  it('should return an item when peeking', () => {
     const stack = new Stack<number>();
-    expect(stack.peek()).toBeNull();
+    stack.push(5);
+
+    const peek = stack.peek();
+    expect(isSome(peek)).toBe(true);
+    expect(peek.unwrap()).toBe(5);
   });
 
-  it('should return null if trying to pop empty stack', () => {
+  it('should pop an item from the stack', () => {
     const stack = new Stack<number>();
-    expect(stack.pop()).toBeNull();
+    stack.push(5);
+
+    const v = stack.pop();
+    expect(stack).toHaveLength(0);
+    expect(isNone(stack.peek())).toBe(true);
+    expect(isSome(v)).toBe(true);
+    expect(v.unwrap()).toBe(5);
   });
 });

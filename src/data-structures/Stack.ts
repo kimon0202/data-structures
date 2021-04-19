@@ -1,10 +1,12 @@
-import { Option } from '../utils/types';
+/* eslint-disable @typescript-eslint/no-non-null-assertion */
+import { Option, None, Some } from '../utils/Option';
+import { last } from '../utils/array';
 
 export class Stack<T> {
   private readonly buffer: T[];
 
-  public constructor() {
-    this.buffer = [];
+  public constructor(size = 0) {
+    this.buffer = new Array<T>(size);
   }
 
   public get length(): number {
@@ -12,8 +14,8 @@ export class Stack<T> {
   }
 
   public peek(): Option<T> {
-    if (this.buffer.length === 0) return null;
-    return this.buffer[this.buffer.length - 1];
+    if (this.length === 0) return None();
+    return Some(last(this.buffer));
   }
 
   public push(value: T): void {
@@ -21,14 +23,7 @@ export class Stack<T> {
   }
 
   public pop(): Option<T> {
-    return this.buffer.pop() || null;
-  }
-
-  public toArray(): T[] {
-    return this.buffer;
-  }
-
-  public toString(): string {
-    return this.buffer.map(i => `${i}`).join(',');
+    if (this.length === 0) return None();
+    return Some(this.buffer.pop()!);
   }
 }
