@@ -35,7 +35,7 @@ export class Option<T> {
 export const None = <T>(): Option<T> => Option.None<T>();
 export const Some = <T>(value: T): Option<T> => Option.Some(value);
 
-export const match = <T, Return = unknown>(
+export const match = <T, Return = void>(
   obj: Option<T>,
   clauses: MatchObject<T, typeof obj, Return>,
 ): Return => {
