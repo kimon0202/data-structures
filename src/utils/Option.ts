@@ -1,17 +1,21 @@
 import { UnwrapNullValueError } from './errors/UnwrapNullValueError';
 
-type OptionTag = 'None' | 'Some';
 type MatchObject<T, Obj extends Option<T>, Return = unknown> = {
-  [key in Obj['_tag']]: (value: 'None' extends key ? never : T) => Return;
+  [key in Obj['wrapper']['_tag']]: (
+    value: 'None' extends key ? never : T,
+  ) => Return;
 };
 
+type OptionVariant<T> = { _tag: 'None' } | { _tag: 'Some'; value: T };
+
 export class Option<T> {
-  public readonly _tag: OptionTag;
-  public readonly value: T | null;
+  public readonly wrapper: OptionVariant<T>;
 
   private constructor(value?: T) {
-    this._tag = value === undefined ? 'None' : 'Some';
-    this.value = value === undefined ? null : value;
+    this.wrapper =
+      value === undefined || value === null
+        ? { _tag: 'None' }
+        : { _tag: 'Some', value };
   }
 
   public static None<A>(): Option<A> {
@@ -23,8 +27,8 @@ export class Option<T> {
   }
 
   public unwrap(): T {
-    if (this.value === null) throw new UnwrapNullValueError();
-    return this.value;
+    if (this.wrapper._tag === 'None') throw new UnwrapNullValueError();
+    return this.wrapper.value;
   }
 }
 
@@ -35,12 +39,12 @@ export const match = <T, Return = unknown>(
   obj: Option<T>,
   clauses: MatchObject<T, typeof obj, Return>,
 ): Return => {
-  if (obj.value === null) return clauses.None(null as never);
+  if (obj.wrapper._tag === 'None') return clauses.None(null as never);
   return clauses.Some(obj.unwrap());
 };
 
 export const isNone = (value: Option<unknown>): boolean =>
-  value._tag === 'None';
+  value.wrapper._tag === 'None';
 
 export const isSome = (value: Option<unknown>): boolean =>
-  value._tag === 'Some';
+  value.wrapper._tag === 'Some';
